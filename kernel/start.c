@@ -38,6 +38,12 @@ start()
   w_mideleg(0xffff);
   w_sie(r_sie() | SIE_SEIE | SIE_STIE | SIE_SSIE);
 
+  // configure Physical Memory Protection to give supervisor mode
+  // access to all of physical memory. Needed on newer QEMU, which
+  // follows the spec and denies S-mode access when no PMP entry matches.
+  w_pmpaddr0(0x3fffffffffffffull);
+  w_pmpcfg0(0xf);
+
   // ask for clock interrupts.
   timerinit();
 
